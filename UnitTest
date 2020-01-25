@@ -1,0 +1,27 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FileEncryption;
+
+namespace UnitTest
+{
+    [TestClass]
+    public class UnitTestEncryptor
+    {
+        [TestMethod]
+        public void TestMethodEncryptText()//проверка шифрования данных
+        {
+            string key = "5421";
+            string text = "Дорогие друзья, консультация с профессионалами из IT обеспечивает актуальность экономической...";
+            string encryptText = Form1.Encrypt(text, key);
+            string decryptText = Form1.Decrypt(encryptText, key);
+            Assert.AreEqual<string>(text, decryptText);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(KeyException), "Поле Ключ пустое. Введите ключ.")]
+        public void TestMethodKeyCheck() => Form1.Encrypt("text", "");
+
+        [TestMethod]
+        [ExpectedException(typeof(TextException), "Файл не найден. Добавьте файл.")]
+        public void TestMethodTextCheck() => Form1.Encrypt("", "5421");
+    }
+}
