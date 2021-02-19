@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace FileEncryption
+namespace Cryptographer
 {
     public partial class Form1 : Form
     {
@@ -20,14 +20,6 @@ namespace FileEncryption
                 return;
             string filename = saveFileDialog1.FileName;
             File.WriteAllText(filename, text);
-        }
-
-        private void buttonFile_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.FileName = null;
-            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
-                return;
-            textBoxFile.Text = openFileDialog1.FileName;
         }
 
         public static string Encrypt(string text, string key)
@@ -78,12 +70,11 @@ namespace FileEncryption
                     MessageBox.Show(ex.Message);
                 }
             }
-            catch(TextException e)
+            catch (TextException e)
             {
                 MessageBox.Show(e.Message);
             }
         }
-
         public void DecryptFile()
         {
             try
@@ -119,18 +110,6 @@ namespace FileEncryption
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if(progressBar1.Value == 100)
-            {
-                timer1.Stop();
-            }
-            else
-            {
-                progressBar1.Value = progressBar1.Value + 10;
-            }
-        }
-
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             if (textBoxFile.Text == "")
@@ -150,12 +129,38 @@ namespace FileEncryption
                     EncryptFile();
                 }
             }
+        }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (progressBar1.Value == 100)
+            {
+                timer1.Stop();
+            }
+            else
+            {
+                progressBar1.Value = progressBar1.Value + 10;
+            }
+        }
+
+        private void buttonFile_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.FileName = null;
+            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
+                return;
+            textBoxFile.Text = openFileDialog1.FileName;
+        }
+
+        private void buttonClean_Click(object sender, EventArgs e)
+        {
+            textBoxFile.Text = "";
+            textBoxKey.Text = "";
+            radioButtonEncrypt.Checked = true;
         }
     }
 
     [Serializable]
-    public class KeyException:Exception
+    public class KeyException : Exception
     {
         public KeyException() : base("Поле Ключ пустое. Введите ключ.") { }
     }
